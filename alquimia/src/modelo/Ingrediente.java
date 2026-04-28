@@ -1,45 +1,53 @@
 package modelo;
 
-import java.util.Scanner;
+import persistencia.BancoDados;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Ingrediente {
-    private int qtdI;
-    private int qtdB;
-    private String[] ingredientes;
-    private String[] base;
+public class Ingrediente extends Entidade<Ingrediente> {
+    private String nome;
 
-    public Ingrediente() {
-        this.ingredientes = new String[]{
-                "Mirtilo",
-                "Morango",
-                "Amora",
-                "Flor de Lotus",
-                "Raiz de Mandragora",
-                "Cogumelo Vermelho",
-                "Cogumelo Verde",
-                "Essencia de Fogo",
-                "Essencia de Gelo",
-                "Asa de morcego"
-        };
-        this.qtdI = ingredientes.length;
-        this.base = new String[]{
-                "Agua",
-                "Oleo",
-                "Toxina"
-        };
-        this.qtdB = base.length;
-
+    public Ingrediente(int id, String nome) {
+        super(id);
+        this.nome = nome;
     }
 
-    public void listaDeComponentes(){
-        System.out.println("Ingredientes:");
-        for (int i = 0; i<qtdI; i++){
-            System.out.println(this.ingredientes[i]);
+    public String getNome() { return nome; }
+
+    @Override
+    public boolean salvar() {
+        return super.salvarNoBanco(BancoDados.bancoIngrediente);
+    }
+
+    @Override
+    public boolean atualizar() {
+        return super.atualizarNoBanco(BancoDados.bancoIngrediente);
+    }
+
+    @Override
+    public boolean apagar(int id) {
+        return super.apagarDoBanco(id, BancoDados.bancoIngrediente);
+    }
+
+    @Override
+    public boolean carregar(int id) {
+        Ingrediente dados = super.carregarDoBanco(id, BancoDados.bancoIngrediente);
+        if (dados != null) {
+            this.setId(dados.getId());
+            this.nome = dados.nome;
+            this.setPersistido(true);
+            return true;
         }
+        return false;
     }
 
-    public String[] getIngredientes() {
-        return ingredientes;
+    @Override
+    public List<Ingrediente> carregarTodos() {
+        return new ArrayList<>(BancoDados.bancoIngrediente.values());
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + " | Nome: " + nome;
     }
 }
-

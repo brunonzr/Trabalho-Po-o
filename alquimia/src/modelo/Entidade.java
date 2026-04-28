@@ -13,7 +13,6 @@ public abstract class Entidade<T> {
     }
 
     public Entidade(int id) {
-        if (id < 0) throw new IllegalArgumentException("ID nÃ£o pode ser negativo");
         this.id = id;
         this.persistido = false;
     }
@@ -26,41 +25,47 @@ public abstract class Entidade<T> {
 
     @Override
     public String toString() {
-        return "ID: " + id + ", Persistido: " + persistido;
+        return "ID: " + id + " | Persistido: " + persistido;
     }
 
-    public boolean salvar(Map<Integer, ? super Entidade> banco) {
-        if (!this.persistido && !banco.containsKey(this.id)) {
-            banco.put(this.id, this);
-            this.persistido = true;
+    @SuppressWarnings("unchecked")
+    protected boolean salvarNoBanco(Map<Integer, T> banco) {
+        if (!persistido && !banco.containsKey(id)) {
+            banco.put(id, (T) this);
+            persistido = true;
             return true;
         }
         return false;
     }
 
-    public boolean atualizar(Map<Integer, ? super Entidade> banco) {
-        if (this.persistido && banco.containsKey(this.id)) {
-            banco.put(this.id, this);
+    @SuppressWarnings("unchecked")
+    protected boolean atualizarNoBanco(Map<Integer, T> banco) {
+        if (persistido && banco.containsKey(id)) {
+            banco.put(id, (T) this);
             return true;
         }
         return false;
     }
 
-    public boolean apagar(int id, Map<Integer, ? super Entidade> banco) {
+    protected boolean apagarDoBanco(int id, Map<Integer, T> banco) {
         if (banco.containsKey(id)) {
-            ((Entidade) banco.get(id)).setPersistido(false);
+            T obj = banco.get(id);
+            if (obj instanceof Entidade<?> e) {
+                e.setPersistido(false);
+            }
             banco.remove(id);
             return true;
         }
         return false;
     }
 
-    public Entidade carregar(int id, Map<Integer, ? extends Entidade> banco) {
-        if (banco.containsKey(id)) {
-            return banco.get(id);
-        }
-        return null;
+    protected T carregarDoBanco(int id, Map<Integer, T> banco) {
+        return banco.get(id);
     }
 
+    public abstract boolean salvar();
+    public abstract boolean atualizar();
+    public abstract boolean apagar(int id);
+    public abstract boolean carregar(int id);
     public abstract List<T> carregarTodos();
 }

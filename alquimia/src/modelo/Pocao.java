@@ -2,10 +2,9 @@ package modelo;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import persistencia.BancoDados;
 
-public class Pocao extends Entidade {
+public class Pocao extends Entidade<Pocao> {
     private String nomePocao;
     private List<Componente> componentes;
 
@@ -16,47 +15,44 @@ public class Pocao extends Entidade {
     }
 
     public void adicionarComponente(Ingrediente ing, int qtd) {
-        this.componentes.add(new Componente(ing, qtd));
-    }
-
-    public void removerComponente(int index) {
-        if (index >= 0 && index < componentes.size()) {
-            this.componentes.remove(index);
-        }
+        componentes.add(new Componente(ing, qtd));
     }
 
     @Override
     public boolean salvar() {
-        return super.salvar((Map) BancoDados.bancoPocao);
+        return super.salvarNoBanco(BancoDados.bancoPocao);
     }
 
     @Override
     public boolean atualizar() {
-        return super.atualizar((Map) BancoDados.bancoPocao);
+        return super.atualizarNoBanco(BancoDados.bancoPocao);
     }
 
     @Override
     public boolean apagar(int id) {
-        return super.apagar(id, (Map) BancoDados.bancoPocao);
+        return super.apagarDoBanco(id, BancoDados.bancoPocao);
     }
 
     @Override
     public boolean carregar(int id) {
-        Pocao p = (Pocao) super.carregar(id, (Map) BancoDados.bancoPocao);
-        if (p != null) {
-            this.nomePocao = p.nomePocao;
-            this.componentes = p.componentes;
+        Pocao dados = super.carregarDoBanco(id, BancoDados.bancoPocao);
+        if (dados != null) {
+            this.setId(dados.getId()); // <-- FALTAVA ISSO
+            this.nomePocao = dados.nomePocao;
+            this.componentes = dados.componentes;
+            this.setPersistido(true);
             return true;
         }
         return false;
     }
 
     @Override
-    public String toString() {
-        return "Poção [ID: " + getId() + " | Nome: " + nomePocao + " | Itens: " + componentes + "]";
+    public List<Pocao> carregarTodos() {
+        return new ArrayList<>(BancoDados.bancoPocao.values());
     }
 
-    public static List<Pocao> carregarTodos() {
-        return new ArrayList<>(BancoDados.bancoPocao.values());
+    @Override
+    public String toString() {
+        return "Poção [ID: " + getId() + " | Nome: " + nomePocao + " | Itens: " + componentes + "]";
     }
 }
