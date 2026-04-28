@@ -5,6 +5,7 @@ import java.util.List;
 import persistencia.BancoDados;
 
 public class Caldeirao extends Entidade<Caldeirao> {
+
     private String nome;
     private boolean status;
 
@@ -15,6 +16,9 @@ public class Caldeirao extends Entidade<Caldeirao> {
         this.nome = nome;
         this.status = status;
     }
+
+    public String getNome() { return nome; }
+    public boolean isStatus() { return status; }
 
     @Override
     public boolean salvar() {
@@ -33,11 +37,11 @@ public class Caldeirao extends Entidade<Caldeirao> {
 
     @Override
     public boolean carregar(int id) {
-        Caldeirao dados = super.carregarDoBanco(id, BancoDados.bancoCaldeirao);
-        if (dados != null) {
-            this.setId(dados.getId()); // <-- FALTAVA ISSO
-            this.nome = dados.nome;
-            this.status = dados.status;
+        Caldeirao c = super.carregarDoBanco(id, BancoDados.bancoCaldeirao);
+        if (c != null) {
+            this.nome = c.nome;
+            this.status = c.status;
+            this.setId(c.getId());
             this.setPersistido(true);
             return true;
         }
@@ -51,6 +55,6 @@ public class Caldeirao extends Entidade<Caldeirao> {
 
     @Override
     public String toString() {
-        return super.toString() + " | Nome: " + nome + " | Status: " + status;
+        return "ID: " + getId() + " | Nome: " + nome + " | Status: " + status;
     }
 }

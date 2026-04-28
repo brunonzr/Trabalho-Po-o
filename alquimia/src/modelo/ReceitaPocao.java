@@ -2,74 +2,54 @@ package modelo;
 
 public class ReceitaPocao {
 
-    private static final String[] POCOES = {
-        "Poção de Vida",
-        "Poção de Força",
-        "Poção de Velocidade",
-        "Poção de Resistência",
-        "Poção de Resistência a Veneno",
-        "Poção de Invisibilidade",
-        "Poção de Visão Noturna",
-        "Poção de Veneno"
-    };
+    public static String verificarReceita(Pocao p) {
 
-    public static String criarPocao(String ingrediente1, String ingrediente2, String base) {
+        if (p.getComponentes().size() < 3)
+            return "Falha na mistura";
 
-        // Poção de Vida
-        if (ingrediente1.equalsIgnoreCase("Cogumelo Vermelho") &&
-            ingrediente2.equalsIgnoreCase("Morango") &&
-            base.equalsIgnoreCase("Agua")) {
-            return POCOES[0];
-        }
+        String ing1 = p.getComponentes().get(0).getIngrediente().getNome();
+        String ing2 = p.getComponentes().get(1).getIngrediente().getNome();
+        String base = p.getComponentes().get(2).getIngrediente().getNome();
 
-        // Poção de Força
-        if (ingrediente1.equalsIgnoreCase("Asa de morcego") &&
-            ingrediente2.equalsIgnoreCase("Raiz de Mandragora") &&
-            base.equalsIgnoreCase("Agua")) {
-            return POCOES[1];
-        }
+        if (ing1.equalsIgnoreCase("Cogumelo Vermelho") &&
+            ing2.equalsIgnoreCase("Morango") &&
+            base.equalsIgnoreCase("Agua"))
+            return "Poção de Vida";
 
-        // Poção de Velocidade
-        if (ingrediente1.equalsIgnoreCase("Flor de Lotus") &&
-            ingrediente2.equalsIgnoreCase("Amora") &&
-            base.equalsIgnoreCase("Agua")) {
-            return POCOES[2];
-        }
+        if (ing1.equalsIgnoreCase("Asa de morcego") &&
+            ing2.equalsIgnoreCase("Raiz de Mandragora") &&
+            base.equalsIgnoreCase("Agua"))
+            return "Poção de Força";
 
-        // Poção de Resistência
-        if (ingrediente1.equalsIgnoreCase("Essencia de Gelo") &&
-            ingrediente2.equalsIgnoreCase("Cogumelo Verde") &&
-            base.equalsIgnoreCase("Oleo")) {
-            return POCOES[3];
-        }
+        if (ing1.equalsIgnoreCase("Flor de Lotus") &&
+            ing2.equalsIgnoreCase("Amora") &&
+            base.equalsIgnoreCase("Agua"))
+            return "Poção de Velocidade";
 
-        // Poção de Resistência a Veneno
-        if (ingrediente1.equalsIgnoreCase("Mirtilo") &&
-            ingrediente2.equalsIgnoreCase("Flor de Lotus") &&
-            base.equalsIgnoreCase("Toxina")) {
-            return POCOES[4];
-        }
+        if (ing1.equalsIgnoreCase("Essencia de Gelo") &&
+            ing2.equalsIgnoreCase("Cogumelo Verde") &&
+            base.equalsIgnoreCase("Oleo"))
+            return "Poção de Resistência";
 
-        // Poção de Invisibilidade
-        if (ingrediente1.equalsIgnoreCase("Flor de Lotus") &&
-            ingrediente2.equalsIgnoreCase("Asa de morcego") &&
-            base.equalsIgnoreCase("Oleo")) {
-            return POCOES[5];
-        }
+        if (ing1.equalsIgnoreCase("Mirtilo") &&
+            ing2.equalsIgnoreCase("Flor de Lotus") &&
+            base.equalsIgnoreCase("Toxina"))
+            return "Poção de Resistência a Veneno";
 
-        // Poção de Visão Noturna
-        if (ingrediente1.equalsIgnoreCase("Mirtilo") &&
-            ingrediente2.equalsIgnoreCase("Essencia de Fogo") &&
-            base.equalsIgnoreCase("Agua")) {
-            return POCOES[6];
-        }
+        if (ing1.equalsIgnoreCase("Flor de Lotus") &&
+            ing2.equalsIgnoreCase("Asa de morcego") &&
+            base.equalsIgnoreCase("Oleo"))
+            return "Poção de Invisibilidade";
 
-        // Poção de Veneno
-        if (ingrediente1.equalsIgnoreCase("Cogumelo Verde") &&
-            ingrediente2.equalsIgnoreCase("Toxina") &&
-            base.equalsIgnoreCase("Toxina")) {
-            return POCOES[7];
-        }
+        if (ing1.equalsIgnoreCase("Mirtilo") &&
+            ing2.equalsIgnoreCase("Essencia de Fogo") &&
+            base.equalsIgnoreCase("Agua"))
+            return "Poção de Visão Noturna";
+
+        if (ing1.equalsIgnoreCase("Cogumelo Verde") &&
+            ing2.equalsIgnoreCase("Toxina") &&
+            base.equalsIgnoreCase("Toxina"))
+            return "Poção de Veneno";
 
         return "Falha na mistura";
     }
